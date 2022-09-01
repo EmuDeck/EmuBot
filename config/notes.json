@@ -1,4 +1,17 @@
 {
+    "categories": {
+        "test-category": {
+            "name": "Test Category",
+            "entries": {
+                "notes": {
+                    "test-question-2": {
+                        "name": "Test Question 2",
+                        "answer": "Test Answer 2"
+                    }
+                }
+            }
+        }
+    },
     "notes": {
         "test-question": {
             "name": "Test Question",

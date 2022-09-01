@@ -8,9 +8,10 @@ import {
 import { CommandInteraction, MessageEmbed, PermissionString } from 'discord.js';
 
 import { Lang } from '../../services/index.js';
+import { Logger } from '../../services/logger.js';
 import { InteractionUtils } from '../../utils/index.js';
 import { Command, CommandDeferType } from '../index.js';
-import { NotesConfig } from './notes.js';
+import { Notes, NotesCache, NotesConfig } from './notes.js';
 
 export class NoteCommand implements Command {
     public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
@@ -25,21 +26,51 @@ export class NoteCommand implements Command {
                 name: Lang.getCom('arguments.note'),
                 required: true,
                 description: Lang.getRef('argumentDescs.note', Lang.Default),
-                choices: this.notes(),
+                choices: this.categories(NotesConfig, '', '/').concat(this.notes(NotesConfig)),
             },
         ],
     };
-    private notes(): AddUndefinedToPossiblyUndefinedPropertiesOfInterface<
+    private categories(
+        notes: Notes,
+        path: string,
+        displayPath: string
+    ): AddUndefinedToPossiblyUndefinedPropertiesOfInterface<
+        APIApplicationCommandOptionChoice<string>
+    >[] {
+        let options: AddUndefinedToPossiblyUndefinedPropertiesOfInterface<
+            APIApplicationCommandOptionChoice<string>
+        >[] = [];
+        for (const key in notes.categories) {
+            for (const key2 in notes.categories[key].entries.notes) {
+                options.push({
+                    name:
+                        displayPath +
+                        notes.categories[key].name +
+                        '/' +
+                        notes.categories[key].entries.notes[key2].name,
+                    value: path + key + '.' + key2,
+                });
+                NotesCache[path + key + '.' + key2] = notes.categories[key].entries.notes[key2];
+            }
+            this.categories(notes.categories[key].entries, path + '.', displayPath + '/');
+        }
+        return options;
+    }
+    private notes(
+        notes: Notes
+    ): AddUndefinedToPossiblyUndefinedPropertiesOfInterface<
         APIApplicationCommandOptionChoice<string>
     >[] {
         let choices: AddUndefinedToPossiblyUndefinedPropertiesOfInterface<
             APIApplicationCommandOptionChoice<string>
         >[] = [];
-        for (const key in NotesConfig.notes) {
+        for (const key in notes.notes) {
+            Logger.info(key);
             choices.push({
-                name: NotesConfig.notes[key].name,
+                name: '/' + notes.notes[key].name,
                 value: key,
             });
+            NotesCache[key] = notes.notes[key];
         }
         return choices;
     }
@@ -50,8 +81,8 @@ export class NoteCommand implements Command {
 
         let embed: MessageEmbed;
         embed = new MessageEmbed({
-            title: NotesConfig.notes[option].name,
-            description: NotesConfig.notes[option].answer,
+            title: NotesCache[option].name,
+            description: NotesCache[option].answer,
         });
 
         await InteractionUtils.send(intr, embed);
