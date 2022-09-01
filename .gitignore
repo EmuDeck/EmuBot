@@ -4,6 +4,7 @@
 /dist
 /**/config/**/*.json
 !/**/config/**/*.example.json
+!/**/config/**/notes.json
 
 # =====================================================
 # Node.js

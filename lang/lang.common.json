@@ -1,10 +1,11 @@
 {
     "bot": {
-        "name": "My Bot",
-        "author": "My Name"
+        "name": "EmuBot",
+        "author": "Witherking25"
     },
     "chatCommands": {
         "help": "help",
+        "note": "note",
         "info": "info",
         "test": "test"
     },
@@ -15,7 +16,8 @@
         "viewDateSent": "View Date Sent"
     },
     "arguments": {
-        "option": "option"
+        "option": "option",
+        "note": "note"
     },
     "colors": {
         "default": "#0099ff",

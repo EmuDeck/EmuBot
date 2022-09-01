@@ -28,6 +28,10 @@
                     }
                 ]
             },
+            "list": {
+                "title": "{{COM:bot.name}} - Notes",
+                "description": []
+            },
             "permissions": {
                 "title": "{{COM:bot.name}} - Permissions",
                 "description": "Want to restrict commands to certain roles, users, or channels? Set up permissions under the bot's **Integration** page in the Server Settings (or simply right-click the bot and select **Manage Integration**).",
@@ -197,8 +201,12 @@
         },
         "commandDescs": {
             "help": "Get help with commands, permissions, FAQ, etc.",
+            "note": "View or list answers to common questions",
             "info": "View bot info.",
             "test": "Run the test command."
+        },
+        "argumentDescs": {
+            "note": "The note to retrieve"
         },
         "lists": {
             "languageItem": "**{{LANGUAGE_NAME}}** (`{{LANGUAGE_KEYWORD}}`)"
